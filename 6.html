@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tienda de Relojes MR</title>
+  <style>
+    :root {
+      --azul-claro: #e6f0fb;
+      --azul: #007bff;
+      --azul-oscuro: #0056b3;
+      --blanco: #ffffff;
+      --gris-claro: #f8f9fa;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: var(--azul-claro);
+      color: #333;
+    }
+
+    header {
+      background-color: var(--azul);
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    #cart-count {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background-color: red;
+      color: white;
+      padding: 0.3rem 0.6rem;
+      border-radius: 50%;
+      font-size: 1rem;
+      display: none; /* Oculto inicialmente */
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    section, aside {
+      background: var(--blanco);
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      color: var(--azul);
+      margin-top: 0;
+    }
+
+    .filters {
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .filters select {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: var(--gris-claro);
+      cursor: pointer;
+    }
+
+    #product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .product {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 1rem;
+      background-color: #fff;
+      transition: transform 0.2s ease;
+      text-align: center;
+    }
+
+    .product:hover {
+      transform: scale(1.02);
+    }
+
+    .product img {
+      width: 100%;
+      max-width: 180px;
+      height: auto;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+
+    .product img:hover {
+      opacity: 0.85;
+    }
+
+    .product-info h3 {
+      margin: 0.5rem 0;
+    }
+
+    .product-info h3 a {
+      color: var(--azul);
+      text-decoration: none;
+      cursor: pointer;
+      transition: text-decoration 0.3s ease;
+    }
+
+    .product-info h3 a:hover {
+      text-decoration: underline;
+    }
+
+    .product-info p {
+      margin: 0.3rem 0;
+    }
+
+    .product-info {
+      width: 100%;
+    }
+
+    button {
+      background-color: var(--azul);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: var(--azul-oscuro);
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .cart-item {
+      border-bottom: 1px solid #ccc;
+      padding: 0.5rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-item button {
+      background: #ff4c4c;
+      padding: 0.3rem 0.6rem;
+      border-radius: 50%;
+      font-weight: bold;
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .cart-item button:hover {
+      background: #cc0000;
+    }
+
+    footer {
+      background-color: var(--azul);
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 2rem;
+    }
+
+    footer p {
+      margin: 0.5rem 0;
+    }
+
+    .social-media {
+      margin-top: 2rem;
+    }
+
+    .social-media h3 {
+      color: var(--azul);
+      margin-bottom: 0.5rem;
+    }
+
+    .social-media ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .social-media li {
+      margin: 0.3rem 0;
+    }
+
+    .social-media a {
+      text-decoration: none;
+      color: var(--azul);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .social-media a:hover {
+      color: var(--azul-oscuro);
+    }
+
+    @media (max-width: 768px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+      #cart-count {
+        top: 0.8rem;
+        right: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="3.JPEG" width="200" height="150" style="position: absolute; top: 1rem; left: 1rem;" alt="Logo Tienda de Relojes MR">
+  <h1>Tienda de Relojes MR</h1>
+  <p>El lujo en cada segundo</p>
+  <div id="cart-count"></div>
+</header>
+
+<main>
+  <section class="catalog">
+    <h2>Catálogo</h2>
+    <div class="filters">
+      <select id="filtro-categoria">
+        <option value="">Todas las categorías</option>
+        <option value="Clásico">Clásico</option>
+        <option value="Moderno">Moderno</option>
+        <option value="Deportivo">Deportivo</option>
+        <option value="Lujo">Lujo</option>
+      </select>
+      <select id="filtro-precio">
+        <option value="">Todos los precios</option>
+        <option value="0-3500">Hasta $3500</option>
+        <option value="3501-15000">$3500 - $15000</option>
+        <option value="16000-80000">$15000 - $10000</option>
+      </select>
+    </div>
+    <div id="product-list"></div>
+  </section>
+
+  <aside>
+    <div class="cart">
+      <h2>Carrito</h2>
+      <div id="cart-items"></div>
+      <p><strong>Total:</strong> $<span id="total">0</span></p>
+    </div>
+
+    <div class="register" style="margin-top: 2rem;">
+      <h2>Registro</h2>
+      <form id="register-form">
+        <input type="text" placeholder="Nombre de usuario" required />
+        <input type="email" placeholder="Correo electrónico" required />
+        <input type="password" placeholder="Contraseña" required />
+        <button type="submit">Registrarse</button>
+      </form>
+
+      <div class="social-media">
+        <h3>Redes Sociales</h3>
+        <ul>
+          <li><a href="https://www.facebook.com/share/1GB7fGVacU/" target="_blank">📘 Facebook</a></li>
+          <li><a href="https://whatsapp.com/channel/0029VbAkT1BLikgGp9kDnL1v" target="_blank">📱 WhatsApp</a></li>
+          <li><a href="https://www.instagram.com/relojeriamr07?igsh=MWh4cm40bnNtbmh1aA==" target="_blank">📸 Instagram</a></li>
+          <li><a href="tel:+527718882120">📞 +52 771 888 2120</a></li>
+          <li>✉️ relojeriamr1@gmail.com</li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <h2>Contacto</h2>
+  <p><strong>Dirección:</strong> Ciudad Santiago Tuxtla, Veracruz</p>
+  <p>Síguenos en redes sociales: @relojesmr</p>
+</footer>
+
+<script>
+  const productos = [
+    { id: 1, nombre: "Reloj Clásico", precio: 12500, categoria: "Clásico", imagen: "1.jpeg", pagina: "1.html" },
+    { id: 2, nombre: "Reloj Moderno", precio: 3200, categoria: "Moderno", imagen: "2.jpeg", pagina: "2.html" },
+    { id: 3, nombre: "Reloj Deportivo", precio: 2489, categoria: "Deportivo", imagen: "4.jpeg", pagina: "3.html" },
+    { id: 4, nombre: "Reloj de Lujo", precio: 38000, categoria: "Lujo", imagen: "10.jpeg", pagina: "40.html" },
+    { id: 5, nombre: "Reloj Vintage", precio: 16000, categoria: "Clásico", imagen: "5.jpeg", pagina: "5.html" },
+    { id: 6, nombre: "Reloj Casual", precio: 7500, categoria: "Moderno", imagen: "6.jpeg", pagina: "60.html" },
+    { id: 7, nombre: "Reloj Elegante", precio: 75200, categoria: "Lujo", imagen: "7.jpeg", pagina: "7.html" },
+    { id: 8, nombre: "Reloj Inteligente", precio: 8300, categoria: "Moderno", imagen: "8.jpeg", pagina: "8.html" },
+    { id: 9, nombre: "Reloj de Cuarzo", precio: 6899, categoria: "Clásico", imagen: "9.jpeg", pagina: "9.html" },
+    { id: 10, nombre: "Reloj de Pulsera", precio: 8000, categoria: "Clásico", imagen: "11.jpeg", pagina: "10.html" }
+  ];
+
+  const carrito = [];
+  const productList = document.getElementById('product-list');
+  const cartItems = document.getElementById('cart-items');
+  const totalDisplay = document.getElementById('total');
+  const cartCount = document.getElementById('cart-count');
+  const filtroCategoria = document.getElementById('filtro-categoria');
+  const filtroPrecio = document.getElementById('filtro-precio');
+
+  function mostrarProductos(filtrados = productos) {
+    productList.innerHTML = '';
+    filtrados.forEach(producto => {
+      const div = document.createElement('div');
+      div.classList.add('product');
+      div.innerHTML = `
+        <a href="${producto.pagina}">
+          <img src="${producto.imagen}" alt="${producto.nombre}">
+        </a>
+        <div class="product-info">
+          <h3><a href="${producto.pagina}">${producto.nombre}</a></h3>
+          <p>Precio: $${producto.precio}</p>
+          <p><em>${producto.categoria}</em></p>
+          <button onclick="agregarAlCarrito(${producto.id})">Agregar al carrito</button>
+        </div>
+      `;
+      productList.appendChild(div);
+    });
+  }
+
+  function agregarAlCarrito(id) {
+    const producto = productos.find(p => p.id === id);
+    carrito.push(producto);
+    actualizarCarrito();
+  }
+
+  function eliminarDelCarrito(index) {
+    carrito.splice(index, 1);
+    actualizarCarrito();
+  }
+
+  function actualizarCarrito() {
+    cartItems.innerHTML = '';
+    let total = 0;
+    carrito.forEach((item, index) => {
+      total += item.precio;
+      const div = document.createElement('div');
+      div.classList.add('cart-item');
+      div.innerHTML = `
+        <span>${item.nombre} - $${item.precio}</span>
+        <button onclick="eliminarDelCarrito(${index})">✕</button>
+      `;
+      cartItems.appendChild(div);
+    });
+    totalDisplay.textContent = total;
+    if (carrito.length > 0) {
+      cartCount.style.display = 'block';
+      cartCount.textContent = carrito.length;
+    } else {
+      cartCount.style.display = 'none';
+    }
+  }
+
+  filtroCategoria.addEventListener('change', filtrarProductos);
+  filtroPrecio.addEventListener('change', filtrarProductos);
+
+  function filtrarProductos() {
+    let filtrados = productos;
+
+    const categoria = filtroCategoria.value;
+    const precio = filtroPrecio.value;
+
+    if (categoria) {
+      filtrados = filtrados.filter(p => p.categoria === categoria);
+    }
+
+    if (precio) {
+      const [min, max] = precio.split('-').map(Number);
+      filtrados = filtrados.filter(p => {
+        return isNaN(max) ? p.precio >= min : p.precio >= min && p.precio <= max;
+      });
+    }
+
+    mostrarProductos(filtrados);
+  }
+
+  document.getElementById('register-form').addEventListener('submit', e => {
+    e.preventDefault();
+    alert('Registro exitoso. ¡Bienvenido a Relojes MR!');
+    e.target.reset();
+  });
+
+  mostrarProductos();
+  actualizarCarrito();
+</script>
+
+</body>
+</html>
